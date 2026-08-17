@@ -1,5 +1,4 @@
 # Job-Portal
-# Job-Portal
 # 💼 Django Job Portal System
 
 A **Django-based Job Portal and Recruitment Management System** that connects **Recruiters** with **Jobseekers**.
