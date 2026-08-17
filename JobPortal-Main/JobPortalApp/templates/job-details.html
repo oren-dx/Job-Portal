@@ -1,0 +1,158 @@
+{% extends 'master/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a href="{% url 'browse_job' %}" class="btn btn-outline-secondary">
+            ← Back to Jobs
+        </a>
+    </div>
+
+    <!-- Job Details Card -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <!-- Company Header -->
+            <div class="d-flex align-items-center mb-4">
+
+                <div class="me-3">
+                    {% if job.post_by.logo %}
+                        <img
+                            src="{{ job.post_by.logo.url }}"
+                            alt="{{ job.post_by.company_name }}"
+                            class="rounded"
+                            style="width:100px; height:100px; object-fit:cover;"
+                        >
+                    {% else %}
+                        <div
+                            class="bg-light rounded d-flex align-items-center justify-content-center"
+                            style="width:100px; height:100px;"
+                        >
+                            <span class="text-muted">No Logo</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <h2 class="mb-1">{{ job.title }}</h2>
+
+                    <h5 class="text-muted mb-2">
+                        {{ job.post_by.company_name }}
+                    </h5>
+
+                    <span class="badge bg-primary">
+                        {{ job.category.name }}
+                    </span>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- Job Information -->
+            <div class="row mt-4">
+
+                <div class="col-md-6 mb-3">
+                    <strong>Job Title:</strong>
+                    <p class="text-muted mb-0">
+                        {{ job.title }}
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Company:</strong>
+                    <p class="text-muted mb-0">
+                        {{ job.post_by.company_name }}
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Category:</strong>
+                    <p class="text-muted mb-0">
+                        {{ job.category.name }}
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Deadline:</strong>
+                    <p class="text-danger mb-0">
+                        {{ job.deadline }}
+                    </p>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <strong>Required Skills:</strong>
+
+                    <p class="text-muted mt-2">
+                        {{ job.skill_set }}
+                    </p>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- Job Description -->
+            <div class="mt-4">
+
+                <h4 class="mb-3">Job Description</h4>
+
+                <p class="text-muted">
+                    {{ job.description|linebreaks }}
+                </p>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-4">
+
+                {% if request.user.user_type == 'Jobseekers' %}
+
+                    <a
+                        href="{% url 'apply_job' job.id %}"
+                        class="btn btn-success">Apply Now
+                    </a>
+
+                {% endif %}
+
+
+                {% if request.user.user_type == 'Recruiters' %}
+
+                    {% if job.post_by.recruiter == request.user %}
+
+                        <a 
+                            href="{% url 'update_JobPost' job.id %}"
+                            class="btn btn-warning">Update Job
+                        </a>
+
+                        <a
+                            href="{% url 'delete_JobPost' job.id %}"
+                            class="btn btn-danger">Delete Job
+                        </a>
+
+                        <a
+                            href="{% url 'candidate_list' job.id %}"
+                            class="btn btn-primary">Candidate List
+                        </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+                <a
+                    href="{% url 'browse_job' %}" class="btn btn-secondary">Back
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

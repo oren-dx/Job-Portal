@@ -1,0 +1,77 @@
+<div class="container mt-4">
+
+    <div class="row">
+
+        {% for application in application_list %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ application.applied_job.title }}
+                    </h5>
+
+                    <hr>
+
+                    <p class="mb-2 text-muted">
+                        <strong>Company:</strong>
+                        {{ application.applied_job.post_by.company_name }}
+                    </p>
+
+                    <p class="mb-2 text-muted">
+                        <strong>Category:</strong>
+                        {{ application.applied_job.category.name }}
+                    </p>
+
+                    <p class="mb-3 text-muted">
+                        <strong>Applied Date:</strong>
+                        {{ application.applied_at }}
+                    </p>
+
+
+                    <!-- Status -->
+
+                    {% if application.status == 'Pending' %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+                            Pending
+                        </span>
+
+                    {% elif application.status == 'Accepted' %}
+
+                        <span class="badge bg-success fs-6">
+                            Accepted
+                        </span>
+
+                    {% elif application.status == 'Rejected' %}
+
+                        <span class="badge bg-danger fs-6">
+                            Rejected
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+
+            <div class="alert alert-info">
+                You have not applied for any job yet.
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>

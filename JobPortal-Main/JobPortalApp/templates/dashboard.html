@@ -1,0 +1,194 @@
+{% extends 'master/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    {% if request.user.user_type == 'Jobseekers' %}
+
+        <!-- ========================= -->
+        <!-- JOBSEEKER DASHBOARD -->
+        <!-- ========================= -->
+
+        <h3 class="mb-4">
+            Jobs Matching Your Skills
+        </h3>
+
+        {% for job in job_data %}
+
+        <div class="card mb-3 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="d-flex">
+
+                    <!-- Company Logo -->
+                    <div class="flex-shrink-0 me-3">
+
+                        {% if job.post_by.logo %}
+
+                            <img
+                                src="{{ job.post_by.logo.url }}"
+                                alt="{{ job.post_by.company_name }}"
+                                class="rounded"
+                                style="
+                                    width: 80px;
+                                    height: 80px;
+                                    object-fit: cover;
+                                "
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Job Info -->
+                    <div class="flex-grow-1">
+
+                        <h5 class="mb-1">
+                            {{ job.title }}
+                        </h5>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Company:</strong>
+                            {{ job.post_by.company_name }}
+                        </p>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Category:</strong>
+                            {{ job.category.name }}
+                        </p>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Skills:</strong>
+                            {{ job.skill_set }}
+                        </p>
+
+                        <p class="mb-0 text-danger">
+                            <strong>Deadline:</strong>
+                            {{ job.deadline }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="text-end">
+
+                        <a href="{% url 'job_details' job.id %}" class="btn btn-sm btn-info">View</a>
+
+                        <a
+                            href="{% url 'apply_job' job.id %}" class="btn btn-sm btn-success"> Apply
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+            <div class="alert alert-info">
+                No jobs matching your skills were found.
+            </div>
+
+        {% endfor %}
+
+
+    {% elif request.user.user_type == 'Recruiters' %}
+
+        <!-- ========================= -->
+        <!-- RECRUITER DASHBOARD -->
+        <!-- ========================= -->
+
+        <h3 class="mb-4">
+            My Job Posts
+        </h3>
+
+        {% for job in job_data %}
+
+        <div class="card mb-3 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="row align-items-center">
+
+                    <!-- Job Info -->
+                    <div class="col-md-7">
+
+                        <h5 class="mb-2">
+                            {{ job.title }}
+                        </h5>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Category:</strong>
+                            {{ job.category.name }}
+                        </p>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Skills:</strong>
+                            {{ job.skill_set }}
+                        </p>
+
+                        <p class="mb-1 text-muted">
+                            <strong>Openings:</strong>
+                            {{ job.numer_of_opening }}
+                        </p>
+
+                        <p class="mb-0 text-danger">
+                            <strong>Deadline:</strong>
+                            {{ job.deadline }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Applicant Count -->
+                    <div class="col-md-3 text-center">
+
+                        <h2 class="text-primary mb-0">
+                            {{ job.applicant_count }}
+                        </h2>
+
+                        <small class="text-muted">
+                            Applicants
+                        </small>
+
+                    </div>
+
+
+                    <!-- Action -->
+                    <div class="col-md-2 text-end">
+
+                        <a
+                            href="{% url 'candidate_list' job.id %}"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Candidates
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+            <div class="alert alert-info">
+                You have not posted any jobs yet.
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

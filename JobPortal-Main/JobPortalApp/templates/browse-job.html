@@ -1,0 +1,78 @@
+{% extends 'master/base.html' %}
+
+{% block content %}
+  
+  <h1>Browse Job</h1>
+  {% if request.user.user_type == 'Recruiters' %}
+  <a href="{% url 'post_job' %}" class="btn btn-success">Post Job</a>
+
+  
+<form method="GET" action="{% url 'browse_job' %}" class="d-flex mt-3">
+    <input
+        class="form-control me-2"
+        type="text"
+        name="search_query"
+        value="{{ search_query }}"
+        placeholder="Search by Title, Company, Category, Skill">
+
+    <button class="btn btn-outline-success me-2" type="submit">Search</button>
+
+    <a href="{% url 'browse_job' %}" class="btn btn-outline-danger">Clear</a>
+</form>
+
+ 
+  {% endif %}
+  
+  {% for job in job_data %}
+  <div class="card shadow-sm border-0 mb-3 mt-2">
+  <div class="card-body">
+      <div class="d-flex align-items-center">
+
+        <!---Company Logo--->
+          
+        <div class="flex-shrink-0 me-3">
+          <img src="{{ job.post_by.logo.url}}" 
+          alt="{{ job.post_by.company_name}}"
+          class="rounded"
+          style="width: 80px; height: 80px; object-fit: cover;">
+        </div>
+
+         <!---Job Info--->
+         <div class="flex-grow-1">
+          <h5 class="mb-1">{{job.title}}</h5>
+
+          <p class="mb-1 text-muted"><strong>Company:</strong>{{job.post_by.company_name}}</p>
+
+          <p class="mb-1 text-muted"><span class="badge bg-primary"></span>{{job.category.name}}</p>
+
+          <p class="mb-1 text-muted"><span class="badge bg-primary"></span>{{job.skill_set}}</p>
+
+          <p class="mb-0 text-danger"><strong>Deadline:</strong></span>{{job.deadline}}</p>
+          
+         </div>
+
+         <div class="text-end">
+          {% if request.user.user_type == 'Recruiters' %}
+          {% if job.post_by.recruiter == request.user %}
+          <a href="{% url 'update_JobPost' job.id %}" class="btn btn-sm btn-warning ">Update</a>
+          <a href="{% url 'delete_JobPost' job.id %}" class="btn btn-sm btn-danger ">Delete</a>
+          <a href="{% url 'candidate_list' job.id %}"  class="btn btn-sm btn-primary ">Candidate List</a>
+          {% endif %}
+          {% endif %}
+
+          <a href="{% url 'job_details' job.id %}" class="btn btn-sm btn-info">View</a>
+
+          {% if request.user.user_type == 'Jobseekers'  %}
+          <a href="{% url 'apply_job' job.id %}" class="btn btn-sm btn-success ">Apply</a>
+          {% endif %}
+         </div>
+
+      </div>
+    </div>
+
+  </div>
+  
+    
+  {% endfor %}
+    
+{% endblock %}
